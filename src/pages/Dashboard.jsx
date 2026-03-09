@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Users, TrendingUp, AlertTriangle, BarChart3, Calendar, BookOpen } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
 
-const Dashboard = () => {
-    const [data, setData] = useState([]);
+const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => {
     const [filteredData, setFilteredData] = useState([]);
     const [selectedSemester, setSelectedSemester] = useState('all');
     const [selectedSubject, setSelectedSubject] = useState('all');
     const [selectedStudent, setSelectedStudent] = useState('all');
-    const [sampleDataLoaded, setSampleDataLoaded] = useState(false);
 
     // Generate sample dataset
     const generateSampleData = () => {

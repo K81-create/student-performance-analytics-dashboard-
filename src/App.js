@@ -8,21 +8,33 @@ import Settings from './pages/Settings';
 
 const StudentAnalyticsDashboard = () => {
   const [activePage, setActivePage] = useState('Dashboard');
+  const [data, setData] = useState([]);
+  const [sampleDataLoaded, setSampleDataLoaded] = useState(false);
 
   const renderContent = () => {
     switch (activePage) {
       case 'Dashboard':
-        return <Dashboard />;
+        return <Dashboard
+          data={data}
+          setData={setData}
+          sampleDataLoaded={sampleDataLoaded}
+          setSampleDataLoaded={setSampleDataLoaded}
+        />;
       case 'Students':
-        return <Students />;
+        return <Students data={data} sampleDataLoaded={sampleDataLoaded} />;
       case 'Subjects':
-        return <Subjects />;
+        return <Subjects data={data} sampleDataLoaded={sampleDataLoaded} />;
       case 'Reports':
-        return <Reports />;
+        return <Reports data={data} sampleDataLoaded={sampleDataLoaded} />;
       case 'Settings':
         return <Settings />;
       default:
-        return <Dashboard />;
+        return <Dashboard
+          data={data}
+          setData={setData}
+          sampleDataLoaded={sampleDataLoaded}
+          setSampleDataLoaded={setSampleDataLoaded}
+        />;
     }
   };
 
