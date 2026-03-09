@@ -18,7 +18,7 @@ It provides key insights like average marks, average attendance, at-risk student
 -  **Semester-wise Performance Chart**
 -  **Subject-wise Comparison Chart**
 -  **Attendance vs Marks Correlation (Scatter Plot)**
--  Fully Responsive UI (Works on laptop + mobile)
+-  Fully Responsive UI (Works on laptop)
 
 ---
 
