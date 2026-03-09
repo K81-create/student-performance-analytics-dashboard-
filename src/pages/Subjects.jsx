@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { BookOpen } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+// Added analytics cards: Top Performing Subject and Needs Attention section
 const Subjects = ({ data, sampleDataLoaded }) => {
     // Calculate aggregate data per subject
     const subjectStats = useMemo(() => {
@@ -78,7 +79,7 @@ const Subjects = ({ data, sampleDataLoaded }) => {
                                             <td className="p-4 text-gray-600 text-center">{stat.count}</td>
                                             <td className="p-4 text-center">
                                                 <span className={`px-2 py-1 rounded-full text-sm font-medium inline-block w-12 ${stat.avgMarks >= 75 ? 'bg-green-100 text-green-800' :
-                                                        stat.avgMarks >= 40 ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
+                                                    stat.avgMarks >= 40 ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
                                                     }`}>
                                                     {stat.avgMarks}
                                                 </span>
