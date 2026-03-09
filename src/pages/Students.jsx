@@ -1,11 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Users, Search } from 'lucide-react';
 
 const Students = ({ data, sampleDataLoaded }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
     const safeData = data || [];
-    const filteredData = safeData.filter(student =>
+
+    const studentStats = useMemo(() => {
+        if (!safeData || safeData.length === 0) return [];
+
+        const stats = {};
+
+        safeData.forEach(item => {
+            if (!stats[item.studentId]) {
+                stats[item.studentId] = {
+                    studentId: item.studentId,
+                    studentName: item.studentName,
+                    department: item.department,
+                    totalMarks: 0,
+                    totalAttendance: 0,
+                    count: 0
+                };
+            }
+
+            stats[item.studentId].totalMarks += item.marks;
+            stats[item.studentId].totalAttendance += item.attendance;
+            stats[item.studentId].count += 1;
+        });
+
+        return Object.values(stats).map(stat => ({
+            ...stat,
+            avgMarks: Math.round(stat.totalMarks / stat.count),
+            avgAttendance: Math.round(stat.totalAttendance / stat.count)
+        })).sort((a, b) => {
+            const aNum = parseInt(a.studentId.replace(/\D/g, '')) || 0;
+            const bNum = parseInt(b.studentId.replace(/\D/g, '')) || 0;
+            if (aNum !== bNum) return aNum - bNum;
+            return a.studentId.localeCompare(b.studentId);
+        });
+    }, [safeData]);
+
+    const filteredData = studentStats.filter(student =>
         student?.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         student?.studentId?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -48,39 +83,37 @@ const Students = ({ data, sampleDataLoaded }) => {
                                     <th className="p-4 font-semibold text-gray-700">Student ID</th>
                                     <th className="p-4 font-semibold text-gray-700">Name</th>
                                     <th className="p-4 font-semibold text-gray-700">Department</th>
-                                    <th className="p-4 font-semibold text-gray-700">Subject</th>
-                                    <th className="p-4 font-semibold text-gray-700">Semester</th>
-                                    <th className="p-4 font-semibold text-gray-700">Marks</th>
-                                    <th className="p-4 font-semibold text-gray-700">Attendance</th>
+                                    <th className="p-4 font-semibold text-gray-700 text-center">Enrolled Subjects</th>
+                                    <th className="p-4 font-semibold text-gray-700 text-center">Avg Marks</th>
+                                    <th className="p-4 font-semibold text-gray-700 text-center">Avg Attendance</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredData.length > 0 ? (
                                     filteredData.map((student, index) => (
-                                        <tr key={`${student.studentId}-${student.subject}-${index}`} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                        <tr key={student.studentId} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                                             <td className="p-4 font-medium text-gray-900">{student.studentId}</td>
                                             <td className="p-4 text-gray-700">{student.studentName}</td>
                                             <td className="p-4 text-gray-600">{student.department}</td>
-                                            <td className="p-4 text-gray-600">{student.subject}</td>
-                                            <td className="p-4 text-gray-600">{student.semester}</td>
-                                            <td className="p-4">
-                                                <span className={`px-2 py-1 rounded-full text-sm font-medium ${student.marks >= 75 ? 'bg-green-100 text-green-800' :
-                                                    student.marks >= 40 ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
+                                            <td className="p-4 text-gray-600 text-center">{student.count}</td>
+                                            <td className="p-4 text-center">
+                                                <span className={`px-2 py-1 rounded-full text-sm font-medium ${student.avgMarks >= 75 ? 'bg-green-100 text-green-800' :
+                                                    student.avgMarks >= 40 ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800'
                                                     }`}>
-                                                    {student.marks}
+                                                    {student.avgMarks}
                                                 </span>
                                             </td>
-                                            <td className="p-4">
-                                                <span className={`px-2 py-1 rounded-full text-sm font-medium ${student.attendance >= 75 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                            <td className="p-4 text-center">
+                                                <span className={`px-2 py-1 rounded-full text-sm font-medium ${student.avgAttendance >= 75 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                                                     }`}>
-                                                    {student.attendance}%
+                                                    {student.avgAttendance}%
                                                 </span>
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="7" className="p-8 text-center text-gray-500">
+                                        <td colSpan="6" className="p-8 text-center text-gray-500">
                                             No students found matching your search.
                                         </td>
                                     </tr>
