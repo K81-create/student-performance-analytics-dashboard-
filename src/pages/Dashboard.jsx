@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LoadingState from "../components/loadingstate";
 import { Upload, Users, TrendingUp, AlertTriangle, BarChart3, Calendar, BookOpen } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
 
@@ -7,6 +8,7 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
     const [selectedSemester, setSelectedSemester] = useState('all');
     const [selectedSubject, setSelectedSubject] = useState('all');
     const [selectedStudent, setSelectedStudent] = useState('all');
+    const [loading, setLoading] = useState(true);
 
     // Generate sample dataset
     const generateSampleData = () => {
@@ -60,6 +62,13 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
 
         setFilteredData(filtered);
     }, [selectedSemester, selectedSubject, selectedStudent, data]);
+    useEffect(() => {
+    const timer = setTimeout(() => {
+        setLoading(false);
+    }, 800);
+
+  return () => clearTimeout(timer);
+}, []);
 
     // Calculate analytics
     const calculateAnalytics = () => {
@@ -141,6 +150,10 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
     const semesterData = getSemesterPerformance();
     const subjectData = getSubjectComparison();
     const correlationData = getAttendanceCorrelation();
+
+    if (loading) {
+        return <LoadingState />;
+    }
 
     // Handle CSV file upload
     const handleFileUpload = (e) => {
