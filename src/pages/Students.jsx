@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Users, Search } from 'lucide-react';
+import { Users, Search, Download } from 'lucide-react';
 
 const Students = ({ data, sampleDataLoaded }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -45,6 +45,21 @@ const Students = ({ data, sampleDataLoaded }) => {
         student?.studentId?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const exportCSV = () => {
+        const headers = ['Student ID', 'Name', 'Department', 'Subjects', 'Avg Marks', 'Avg Attendance'];
+        const rows = filteredData.map(s => [
+            s.studentId, s.studentName, s.department, s.count, s.avgMarks, `${s.avgAttendance}%`
+        ]);
+        const csvContent = [headers, ...rows].map(r => r.join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'students_report.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <div className="space-y-6">
             <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -57,15 +72,24 @@ const Students = ({ data, sampleDataLoaded }) => {
                 </div>
 
                 {sampleDataLoaded && (
-                    <div className="relative w-full sm:w-64">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                        <input
-                            type="text"
-                            placeholder="Search students..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                        />
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                        <div className="relative w-full sm:w-64">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                            <input
+                                type="text"
+                                placeholder="Search students..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                            />
+                        </div>
+                        <button
+                            onClick={exportCSV}
+                            className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors whitespace-nowrap"
+                        >
+                            <Download size={16} />
+                            Export CSV
+                        </button>
                     </div>
                 )}
             </div>
@@ -90,7 +114,7 @@ const Students = ({ data, sampleDataLoaded }) => {
                             </thead>
                             <tbody>
                                 {filteredData.length > 0 ? (
-                                    filteredData.map((student, index) => (
+                                    filteredData.map((student) => (
                                         <tr key={student.studentId} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                                             <td className="p-4 font-medium text-gray-900">{student.studentId}</td>
                                             <td className="p-4 text-gray-700">{student.studentName}</td>
