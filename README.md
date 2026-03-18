@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# 🎓 Student Performance Analytics Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based analytics dashboard to track and visualize student academic performance, attendance, and at-risk indicators across semesters and subjects.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- 📊 Interactive charts — semester trends, subject comparison, attendance correlation
+- 🔍 Multi-filter support — by semester, subject, or individual student
+- 📁 CSV upload — bring your own data or load built-in sample data
+- 🚨 At-risk detection — flags students with marks < 40 or attendance < 75%
+- 📋 Department-wise reports with pass/fail breakdown
+- 📱 Responsive layout with sidebar navigation
 
-### `npm start`
+## 🛠️ Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18 |
+| Charts | Recharts |
+| Styling | Tailwind CSS |
+| Icons | Lucide React |
+| Bundler | Create React App |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📦 Installation
+```bash
+git clone https://github.com/YOUR_USERNAME/student-performance-analytics-dashboard.git
+cd student-performance-analytics-dashboard
+npm install
+npm start
+```
 
-### `npm test`
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📁 CSV Format
 
-### `npm run build`
+To upload your own data, use a CSV with these columns:
+```
+studentId, studentName, subject, semester, marks, attendance, department
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Example row:**
+```
+STU001, John Doe, Mathematics, Semester 1, 78, 88, Computer Science
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📂 Project Structure
+```
+src/
+├── components/
+│   ├── Sidebar.jsx        # Navigation sidebar
+│   ├── navbar.js          # Top navigation bar
+│   └── loadingstate.jsx   # Loading spinner component
+├── layout/
+│   └── DashboardLayout.jsx  # Main app layout wrapper
+├── pages/
+│   ├── Dashboard.jsx      # Main dashboard with charts & KPIs
+│   ├── Students.jsx       # Student directory with search
+│   ├── Subjects.jsx       # Subject-wise performance analysis
+│   ├── Reports.jsx        # Department reports & PDF export
+│   └── Settings.jsx       # App settings (coming soon)
+└── App.js                 # Root component with routing
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📊 Dashboard Pages
 
-### `npm run eject`
+- **Dashboard** — KPI cards, semester trend line, subject bar chart, attendance scatter plot
+- **Students** — Searchable table with avg marks and attendance per student
+- **Subjects** — Subject stats, top/bottom performers, pass rate chart
+- **Reports** — Department breakdown, pie chart, print/export to PDF
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 Deployment
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This project is deployment-ready for:
+- **Vercel** — `vercel deploy`
+- **Netlify** — drag & drop `build/` folder
+- **GitHub Pages** — add `"homepage"` to `package.json`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📄 License
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT License — see [LICENSE](LICENSE) for details.
