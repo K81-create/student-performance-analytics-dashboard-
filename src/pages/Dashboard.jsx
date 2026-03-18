@@ -8,9 +8,9 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
     const [selectedSemester, setSelectedSemester] = useState('all');
     const [selectedSubject, setSelectedSubject] = useState('all');
     const [selectedStudent, setSelectedStudent] = useState('all');
+    const [selectedDepartment, setSelectedDepartment] = useState('all');
     const [loading, setLoading] = useState(true);
 
-    // Generate sample dataset
     const generateSampleData = () => {
         const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Computer Science', 'English'];
         const semesters = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4'];
@@ -44,33 +44,32 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
         setSampleDataLoaded(true);
     };
 
-    // Filter data based on selections
     useEffect(() => {
         let filtered = [...data];
 
         if (selectedSemester !== 'all') {
             filtered = filtered.filter(item => item.semester === selectedSemester);
         }
-
         if (selectedSubject !== 'all') {
             filtered = filtered.filter(item => item.subject === selectedSubject);
         }
-
         if (selectedStudent !== 'all') {
             filtered = filtered.filter(item => item.studentId === selectedStudent);
         }
+        if (selectedDepartment !== 'all') {
+            filtered = filtered.filter(item => item.department === selectedDepartment);
+        }
 
         setFilteredData(filtered);
-    }, [selectedSemester, selectedSubject, selectedStudent, data]);
+    }, [selectedSemester, selectedSubject, selectedStudent, selectedDepartment, data]);
+
     useEffect(() => {
-    const timer = setTimeout(() => {
-        setLoading(false);
-    }, 800);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 800);
+        return () => clearTimeout(timer);
+    }, []);
 
-  return () => clearTimeout(timer);
-}, []);
-
-    // Calculate analytics
     const calculateAnalytics = () => {
         if (filteredData.length === 0) return null;
 
@@ -93,7 +92,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
         };
     };
 
-    // Semester-wise performance
     const getSemesterPerformance = () => {
         const semesters = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4'];
         return semesters.map(sem => {
@@ -108,7 +106,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
         });
     };
 
-    // Subject-wise comparison
     const getSubjectComparison = () => {
         const subjects = [...new Set(filteredData.map(item => item.subject))];
         return subjects.map(subject => {
@@ -121,7 +118,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
         }).sort((a, b) => b.avgMarks - a.avgMarks);
     };
 
-    // Attendance vs Marks correlation
     const getAttendanceCorrelation = () => {
         const grouped = {};
         filteredData.forEach(item => {
@@ -141,7 +137,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
         }));
     };
 
-    // Get unique values for filters
     const getUniqueValues = (key) => {
         return [...new Set(data.map(item => item[key]))].sort();
     };
@@ -155,7 +150,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
         return <LoadingState />;
     }
 
-    // Handle CSV file upload
     const handleFileUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -175,7 +169,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
                         obj[header] = values[index];
                     });
 
-                    // Convert to expected format
                     if (obj.studentId && obj.subject && obj.semester) {
                         parsedData.push({
                             studentId: obj.studentId,
@@ -201,7 +194,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
 
     return (
         <div className="space-y-6">
-            {/* Data Upload Section */}
             {!sampleDataLoaded && (
                 <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
                     <div className="text-center">
@@ -244,7 +236,7 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
                             Filters
                         </h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     <Calendar className="inline mr-2" size={16} />
@@ -295,6 +287,23 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
                                     ))}
                                 </select>
                             </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <BarChart3 className="inline mr-2" size={16} />
+                                    Department
+                                </label>
+                                <select
+                                    value={selectedDepartment}
+                                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    <option value="all">All Departments</option>
+                                    {getUniqueValues('department').map(dept => (
+                                        <option key={dept} value={dept}>{dept}</option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -337,7 +346,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
 
                     {/* Charts */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        {/* Semester-wise Performance */}
                         <div className="bg-white rounded-2xl shadow-lg p-6">
                             <h3 className="text-xl font-semibold text-gray-800 mb-4">Semester-wise Performance</h3>
                             <ResponsiveContainer width="100%" height={300}>
@@ -352,7 +360,6 @@ const Dashboard = ({ data, setData, sampleDataLoaded, setSampleDataLoaded }) => 
                             </ResponsiveContainer>
                         </div>
 
-                        {/* Subject-wise Comparison */}
                         <div className="bg-white rounded-2xl shadow-lg p-6">
                             <h3 className="text-xl font-semibold text-gray-800 mb-4">Subject-wise Comparison</h3>
                             <ResponsiveContainer width="100%" height={300}>
