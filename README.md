@@ -23,7 +23,7 @@ A React-based analytics dashboard to track and visualize student academic perfor
 
 ## 📦 Installation
 ```bash
-git clone https://github.com/YOUR_USERNAME/student-performance-analytics-dashboard.git
+git clone https://github.com/K81-create/student-performance-analytics-dashboard.git
 cd student-performance-analytics-dashboard
 npm install
 npm start
