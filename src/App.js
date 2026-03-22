@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Users, TrendingUp, AlertTriangle, BarChart3, GraduationCap, Calendar, BookOpen } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
 
+
 const StudentAnalyticsDashboard = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -10,6 +11,7 @@ const StudentAnalyticsDashboard = () => {
   const [selectedStudent, setSelectedStudent] = useState('all');
   const [sampleDataLoaded, setSampleDataLoaded] = useState(false);
 
+  // dark mode feature added
   const [darkMode, setDarkMode] = useState(false);
 
   // Generate sample dataset
