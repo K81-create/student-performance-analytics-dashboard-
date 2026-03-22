@@ -10,6 +10,8 @@ const StudentAnalyticsDashboard = () => {
   const [selectedStudent, setSelectedStudent] = useState('all');
   const [sampleDataLoaded, setSampleDataLoaded] = useState(false);
 
+  const [darkMode, setDarkMode] = useState(false);
+
   // Generate sample dataset
   const generateSampleData = () => {
     const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Computer Science', 'English'];
@@ -62,6 +64,25 @@ const StudentAnalyticsDashboard = () => {
     
     setFilteredData(filtered);
   }, [selectedSemester, selectedSubject, selectedStudent, data]);
+
+  useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    setDarkMode(true);
+    document.body.classList.add("dark");
+  }
+}, []);
+
+const toggleTheme = () => {
+  if (darkMode) {
+    document.body.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  } else {
+    document.body.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  }
+  setDarkMode(!darkMode);
+};
 
   // Calculate analytics
   const calculateAnalytics = () => {
@@ -189,22 +210,37 @@ const StudentAnalyticsDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+    <div className={`min-h-screen p-6 ${
+  darkMode
+    ? "bg-gray-900 text-white"
+    : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
+}`}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-xl">
-                <GraduationCap className="text-white" size={32} />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-800">Student Performance Analytics</h1>
-                <p className="text-gray-600 mt-1">Cloud-Based Dashboard for Academic Insights</p>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div className="flex items-center justify-between">
+    
+    {/* LEFT SIDE */}
+    <div className="flex items-center gap-4">
+      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-xl">
+        <GraduationCap className="text-white" size={32} />
+      </div>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">Student Performance Analytics</h1>
+        <p className="text-gray-600 mt-1">Cloud-Based Dashboard for Academic Insights</p>
+      </div>
+    </div>
+
+    {/* RIGHT SIDE (BUTTON) */}
+    <button
+      onClick={toggleTheme}
+      className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+    >
+      {darkMode ? "☀ Light" : "🌙 Dark"}
+    </button>
+
+  </div>
+</div>
 
         {/* Data Upload Section */}
         {!sampleDataLoaded && (
