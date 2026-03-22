@@ -137,6 +137,30 @@ const toggleTheme = () => {
     }).sort((a, b) => b.avgMarks - a.avgMarks);
   };
 
+  const getStudentVsClassData = () => {
+  if (filteredData.length === 0 || selectedStudent === 'all') return [];
+
+  const subjects = [...new Set(filteredData.map(item => item.subject))];
+
+  return subjects.map(subject => {
+    const subjectData = filteredData.filter(item => item.subject === subject);
+
+    const classAvg =
+      subjectData.reduce((sum, item) => sum + item.marks, 0) /
+      subjectData.length;
+
+    const studentRecord = subjectData.find(
+      item => item.studentId === selectedStudent
+    );
+
+    return {
+      subject,
+      studentMarks: studentRecord ? studentRecord.marks : 0,
+      classAvg: parseFloat(classAvg.toFixed(2))
+    };
+  });
+};
+
   // Attendance vs Marks correlation
   const getAttendanceCorrelation = () => {
     const grouped = {};
@@ -166,6 +190,8 @@ const toggleTheme = () => {
   const semesterData = getSemesterPerformance();
   const subjectData = getSubjectComparison();
   const correlationData = getAttendanceCorrelation();
+  const studentVsClassData = getStudentVsClassData();
+
 
   // Handle CSV file upload
   const handleFileUpload = (e) => {
@@ -428,6 +454,27 @@ const toggleTheme = () => {
                 Correlation shows relationship between attendance and academic performance
               </p>
             </div>
+
+            {selectedStudent !== 'all' && (
+  <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+    <h3 className="text-xl font-semibold text-gray-800 mb-4">
+      Student vs Class Average
+    </h3>
+
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={studentVsClassData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="subject" />
+        <YAxis domain={[0, 100]} />
+        <Tooltip />
+        <Legend />
+
+        <Bar dataKey="studentMarks" fill="#3b82f6" name="Student" />
+        <Bar dataKey="classAvg" fill="#10b981" name="Class Avg" />
+      </BarChart>
+    </ResponsiveContainer>
+  </div>
+)}
 
             {/* Footer Info */}
             <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-lg p-6 mt-6 text-white">
