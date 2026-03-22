@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Users, TrendingUp, AlertTriangle, BarChart3, GraduationCap, Calendar, BookOpen } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter } from 'recharts';
-
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter, Cell } from 'recharts';
 
 const StudentAnalyticsDashboard = () => {
   const [data, setData] = useState([]);
@@ -480,7 +479,15 @@ const toggleTheme = () => {
         <Tooltip />
         <Legend />
 
-        <Bar dataKey="studentMarks" fill="#3b82f6" name="Student" />
+        <Bar dataKey="studentMarks" name="Student" fill="#3b82f6">
+  {studentVsClassData.map((entry, index) => (
+    <Cell
+      key={`cell-${index}`}
+      fill={entry.studentMarks < 40 ? "#ef4444" : "#3b82f6"}
+    />
+  ))}
+</Bar>
+
         <Bar dataKey="classAvg" fill="#10b981" name="Class Avg" />
       </BarChart>
     </ResponsiveContainer>
