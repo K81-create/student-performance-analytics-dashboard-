@@ -183,8 +183,19 @@ const toggleTheme = () => {
 
   // Get unique values for filters
   const getUniqueValues = (key) => {
-    return [...new Set(data.map(item => item[key]))].sort();
-  };
+  const values = [...new Set(data.map(item => item[key]))];
+
+  // Special handling for studentId
+  if (key === "studentId") {
+    return values.sort((a, b) => {
+      const numA = parseInt(a.replace("STU", ""));
+      const numB = parseInt(b.replace("STU", ""));
+      return numA - numB;
+    });
+  }
+
+  return values.sort();
+};
 
   const analytics = calculateAnalytics();
   const semesterData = getSemesterPerformance();
