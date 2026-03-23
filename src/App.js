@@ -275,14 +275,19 @@ const topScore = Math.max(...filteredData.map((item) => item.marks));
     
     {/* LEFT SIDE */}
     <div className="flex items-center gap-4">
-      <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-xl">
-        <GraduationCap className="text-white" size={32} />
-      </div>
-      <div>
-        <h1 className="text-3xl font-bold text-gray-800">Student Performance Analytics</h1>
-        <p className="text-gray-600 mt-1">Cloud-Based Dashboard for Academic Insights</p>
-      </div>
-    </div>
+  <div className="bg-gray-100 p-4 rounded-xl">
+    <GraduationCap className="text-blue-600" size={40} />
+  </div>
+
+  <div>
+    <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
+      Student Performance Analytics
+    </h1>
+    <p className="text-gray-600 dark:text-gray-300 mt-1">
+      Cloud-Based Dashboard for Academic Insights
+    </p>
+  </div>
+</div>
 
     {/* RIGHT SIDE (BUTTON) */}
     <button
@@ -458,8 +463,6 @@ text-gray-900 dark:text-white">
     Top Score
   </p>
 </div>
-                
-
               </div>
             )}
 
