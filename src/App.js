@@ -97,14 +97,29 @@ const toggleTheme = () => {
         .filter(item => item.marks < 40 || item.attendance < 75)
         .map(item => item.studentId)
     )];
+    
 
     const totalStudents = [...new Set(filteredData.map(item => item.studentId))].length;
+    // ✅ Pass Percentage
+const passCount = [
+  ...new Set(
+    filteredData
+      .filter((item) => item.marks >= 40)
+      .map((item) => item.studentId)
+  ),
+].length;
 
+const passPercentage = (passCount / totalStudents) * 100;
+
+// ✅ Top Score
+const topScore = Math.max(...filteredData.map((item) => item.marks));
     return {
       avgMarks: avgMarks.toFixed(2),
       avgAttendance: avgAttendance.toFixed(2),
       atRiskCount: atRiskStudents.length,
-      totalStudents
+      totalStudents,
+      passPercentage: passPercentage.toFixed(1),
+      topScore
     };
   };
 
@@ -379,7 +394,7 @@ const toggleTheme = () => {
 
             {/* KPI Cards */}
             {analytics && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
                 <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg p-6 text-white">
                   <div className="flex items-center justify-between mb-2">
                     <TrendingUp size={32} />
@@ -411,6 +426,40 @@ const toggleTheme = () => {
                   </div>
                   <p className="text-purple-100">Total Students</p>
                 </div>
+                <div className="bg-gradient-to-br from-green-600 to-green-700 
+dark:from-green-500 dark:to-green-600 
+rounded-2xl shadow-lg p-6 
+text-gray-900 dark:text-white">
+
+  <div className="flex items-center justify-between mb-2">
+    <TrendingUp size={32} />
+    <span className="text-3xl font-bold">
+      {analytics.passPercentage}%
+    </span>
+  </div>
+
+  <p className="text-gray-700 dark:text-green-100">
+    Pass Percentage
+  </p>
+</div>
+<div className="bg-gradient-to-br from-yellow-500 to-yellow-600 
+dark:from-yellow-400 dark:to-yellow-500 
+rounded-2xl shadow-lg p-6 
+text-gray-900 dark:text-white">
+
+  <div className="flex items-center justify-between mb-2">
+    <TrendingUp size={32} />
+    <span className="text-3xl font-bold">
+      {analytics.topScore}
+    </span>
+  </div>
+
+  <p className="text-gray-700 dark:text-yellow-100">
+    Top Score
+  </p>
+</div>
+                
+
               </div>
             )}
 
