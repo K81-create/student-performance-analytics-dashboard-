@@ -99,13 +99,13 @@ const toggleTheme = () => {
     )];
     
 
-    const totalStudents = [...new Set(filteredData.map(item => item.studentId))].length;
+    const totalStudents = [...new Set(filteredData.map(item => item.studentId.trim()))].length;
     // ✅ Pass Percentage
 const passCount = [
   ...new Set(
     filteredData
       .filter((item) => item.marks >= 40)
-      .map((item) => item.studentId)
+      .map((item) => item.studentId.trim())
   ),
 ].length;
 
@@ -197,7 +197,7 @@ const topScore = Math.max(...filteredData.map((item) => item.marks));
 
   // Get unique values for filters
   const getUniqueValues = (key) => {
-  const values = [...new Set(data.map(item => item[key]))];
+  const values = [...new Set(filteredData.map(item => item[key]))];
 
   // Special handling for studentId
   if (key === "studentId") {
