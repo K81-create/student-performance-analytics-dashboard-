@@ -68,12 +68,27 @@ src/
 - **Subjects** — Subject stats, top/bottom performers, pass rate chart
 - **Reports** — Department breakdown, pie chart, print/export to PDF
 
-## 🚀 Deployment
+## ☁️ Cloud Deployment (AWS S3)
 
-This project is deployment-ready for:
-- **Vercel** — `vercel deploy`
-- **Netlify** — drag & drop `build/` folder
-- **GitHub Pages** — add `"homepage"` to `package.json`
+This project is deployed on **Amazon Web Services (AWS S3)** with static website hosting.
+
+### Live URL
+http://student-dashboard-ett.s3-website-us-east-1.amazonaws.com
+
+### Deployment Steps
+1. Run `npm run build` to generate the production build
+2. Create an S3 bucket with static website hosting enabled
+3. Upload all contents of the `build/` folder to the S3 bucket
+4. Set bucket policy to allow public read access
+5. Access the live URL from S3 static website hosting settings
+
+### AWS Services Used
+| Service | Purpose |
+|---------|---------|
+| Amazon S3 | Static file hosting |
+| S3 Bucket Policy | Public read access |
+| S3 Static Website Hosting | Serve React build files |
+```
 
 ## 📄 License
 
