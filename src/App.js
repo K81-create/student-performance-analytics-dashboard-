@@ -42,6 +42,9 @@ const StudentAnalyticsDashboard = () => {
       });
     }
     
+    setSelectedSemester('all');
+    setSelectedSubject('all');
+    setSelectedStudent('all');
     setData(sampleData);
     setFilteredData(sampleData);
     setSampleDataLoaded(true);
@@ -227,7 +230,16 @@ const topScore = Math.max(...filteredData.map((item) => item.marks));
     reader.onload = (event) => {
       const text = event.target.result;
       const rows = text.split('\n');
-      const headers = rows[0].split(',').map(h => h.trim());
+      
+      if (rows.length < 2) {
+        alert("The CSV file seems to be empty or has no data rows.");
+        e.target.value = '';
+        return;
+      }
+
+      // Normalize headers to lowercase and remove spaces/underscores for easier matching
+      const originalHeaders = rows[0].split(',').map(h => h.trim());
+      const headers = originalHeaders.map(h => h.toLowerCase().replace(/[\s_]/g, ''));
       
       const parsedData = [];
       for (let i = 1; i < rows.length; i++) {
@@ -238,26 +250,42 @@ const topScore = Math.max(...filteredData.map((item) => item.marks));
             obj[header] = values[index];
           });
           
-          // Convert to expected format
-          if (obj.studentId && obj.subject && obj.semester) {
+          // Try to find correct keys with normalized names
+          const sId = obj['studentid'] || obj['student'];
+          const sub = obj['subject'] || obj['course'];
+          const sem = obj['semester'] || obj['term'];
+          const marks = obj['marks'] || obj['score'] || obj['grade'];
+          const attend = obj['attendance'] || obj['present'];
+          const dept = obj['department'] || obj['dept'];
+          const sName = obj['studentname'] || obj['name'];
+
+          if (sId && sub && sem) {
             parsedData.push({
-              studentId: obj.studentId,
-              studentName: obj.studentName || obj.studentId,
-              subject: obj.subject,
-              semester: obj.semester,
-              marks: parseInt(obj.marks) || 0,
-              attendance: parseInt(obj.attendance) || 0,
-              department: obj.department || 'General'
+              studentId: sId,
+              studentName: sName || sId,
+              subject: sub,
+              semester: sem,
+              marks: parseInt(marks) || 0,
+              attendance: parseInt(attend) || 0,
+              department: dept || 'General'
             });
           }
         }
       }
       
       if (parsedData.length > 0) {
+        setSelectedSemester('all');
+        setSelectedSubject('all');
+        setSelectedStudent('all');
         setData(parsedData);
         setFilteredData(parsedData);
         setSampleDataLoaded(true);
+      } else {
+        alert('Could not load data. Please ensure your CSV has columns like: studentId, subject, semester, marks, attendance.');
       }
+
+      // Reset value so we can upload the same file again if desired
+      e.target.value = '';
     };
     reader.readAsText(file);
   };
@@ -290,12 +318,25 @@ const topScore = Math.max(...filteredData.map((item) => item.marks));
 </div>
 
     {/* RIGHT SIDE (BUTTON) */}
-    <button
-      onClick={toggleTheme}
-      className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-    >
-      {darkMode ? "☀ Light" : "🌙 Dark"}
-    </button>
+    <div className="flex items-center gap-4">
+      {sampleDataLoaded && (
+        <label className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors shadow-sm font-medium">
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+          Upload New Data
+        </label>
+      )}
+      <button
+        onClick={toggleTheme}
+        className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white"
+      >
+        {darkMode ? "☀ Light" : "🌙 Dark"}
+      </button>
+    </div>
 
   </div>
 </div>
